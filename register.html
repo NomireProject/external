@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Реєстрація | Створення облікового запису</title>
+    <title>Nomire External | Реєстрація</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
         :root {
@@ -44,6 +44,7 @@
             overflow-x: hidden;
         }
         
+        /* Фоновий візерунок */
         body::before {
             content: '';
             position: absolute;
@@ -51,8 +52,33 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, rgba(74, 111, 165, 0.05) 0%, rgba(52, 84, 129, 0.05) 100%);
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(74, 111, 165, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(52, 84, 129, 0.03) 0%, transparent 20%),
+                radial-gradient(circle at 50% 50%, rgba(74, 111, 165, 0.05) 0%, transparent 30%);
             z-index: -1;
+        }
+        
+        .logo-header {
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-dark);
+            z-index: 5;
+            animation: fadeInDown 0.8s ease forwards;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .logo-header i {
+            margin-right: 10px;
+            font-size: 28px;
+            color: var(--primary);
         }
         
         .container {
@@ -60,21 +86,37 @@
             max-width: 950px;
             position: relative;
             z-index: 1;
+            perspective: 1000px;
         }
         
         .card {
             background-color: var(--card-bg);
             border-radius: 16px;
             box-shadow: var(--card-shadow);
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             overflow: hidden;
             display: flex;
             flex-direction: row;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            transform-origin: center;
+            transform: rotateX(5deg) scale(0.95);
+            opacity: 0;
+            animation: cardAppear 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards 0.2s;
+        }
+        
+        @keyframes cardAppear {
+            0% {
+                opacity: 0;
+                transform: rotateX(10deg) scale(0.95);
+            }
+            100% {
+                opacity: 1;
+                transform: rotateX(0deg) scale(1);
+            }
         }
         
         .card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-5px) scale(1.01);
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
         }
         
@@ -92,6 +134,7 @@
             overflow: hidden;
         }
         
+        /* Декоративні елементи для лівої панелі */
         .card-image::before {
             content: '';
             position: absolute;
@@ -103,12 +146,47 @@
             z-index: 0;
         }
         
+        .circle-decoration {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            z-index: 0;
+        }
+        
+        .circle-1 {
+            width: 150px;
+            height: 150px;
+            top: -30px;
+            left: -30px;
+        }
+        
+        .circle-2 {
+            width: 100px;
+            height: 100px;
+            bottom: 20px;
+            right: 20px;
+        }
+        
+        .circle-3 {
+            width: 70px;
+            height: 70px;
+            top: 50%;
+            right: -20px;
+            opacity: 0.2;
+        }
+        
         .card-image i {
             font-size: 70px;
             margin-bottom: 30px;
             position: relative;
             z-index: 1;
             text-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            animation: pulseIcon 2s infinite alternate;
+        }
+        
+        @keyframes pulseIcon {
+            from { transform: scale(1); text-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); }
+            to { transform: scale(1.05); text-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); }
         }
         
         .card-image h3 {
@@ -117,6 +195,18 @@
             margin-bottom: 15px;
             position: relative;
             z-index: 1;
+        }
+        
+        .card-image .brand-name {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #fff;
+            letter-spacing: 1px;
+            position: relative;
+            z-index: 1;
+            animation: fadeIn 1s ease forwards 0.8s;
+            opacity: 0;
         }
         
         .card-image p {
@@ -139,6 +229,14 @@
             margin-bottom: 16px;
             color: var(--text-dark);
             letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+        }
+        
+        h2 .nomire-label {
+            color: var(--primary);
+            font-weight: 700;
+            margin-right: 8px;
         }
         
         p.subtitle {
@@ -150,6 +248,20 @@
         .form-group {
             margin-bottom: 26px;
             position: relative;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.5s ease forwards;
+        }
+        
+        .form-group:nth-child(1) { animation-delay: 0.4s; }
+        .form-group:nth-child(2) { animation-delay: 0.6s; }
+        .form-group:nth-child(3) { animation-delay: 0.8s; }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         
         label {
@@ -252,6 +364,26 @@
             align-items: center;
             justify-content: center;
             box-shadow: 0 4px 12px rgba(74, 111, 165, 0.2);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.5s ease forwards 1s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+        
+        .button:hover::before {
+            left: 100%;
         }
         
         .button:hover {
@@ -299,6 +431,8 @@
             margin-top: 28px;
             font-size: 15px;
             color: var(--text-light);
+            opacity: 0;
+            animation: fadeIn 0.5s ease forwards 1.2s;
         }
         
         .auth-links a {
@@ -319,7 +453,8 @@
             margin-top: 30px;
             font-size: 13px;
             color: var(--text-light);
-            opacity: 0.8;
+            opacity: 0;
+            animation: fadeIn 0.5s ease forwards 1.4s;
         }
         
         .footer a {
@@ -333,19 +468,15 @@
             text-decoration: underline;
         }
         
-        /* Анімації */
+        /* Додаткові анімації */
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
         
-        .card {
-            animation: fadeIn 0.6s ease forwards;
-        }
-        
-        /* Додаткові стилізації для покращення взаємодії */
-        input:focus + .input-icon {
-            color: var(--primary);
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translate(-50%, -20px); }
+            to { opacity: 1; transform: translate(-50%, 0); }
         }
         
         .logo-shine {
@@ -356,7 +487,7 @@
             height: 100%;
             background: rgba(255, 255, 255, 0.3);
             transform: skewX(-25deg);
-            animation: shine 3s infinite;
+            animation: shine 4s infinite 1s;
         }
         
         @keyframes shine {
@@ -384,6 +515,10 @@
             h2 {
                 font-size: 26px;
             }
+            
+            .logo-header {
+                top: 20px;
+            }
         }
         
         @media (max-width: 480px) {
@@ -406,24 +541,41 @@
             .button {
                 padding: 14px 16px;
             }
+            
+            .logo-header {
+                font-size: 20px;
+            }
+            
+            .logo-header i {
+                font-size: 24px;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Заголовок з логотипом -->
+    <div class="logo-header">
+        <i class="fas fa-shield-alt"></i> Nomire External
+    </div>
+    
     <div class="container">
         <div class="card">
             <!-- Ліва частина з зображенням -->
             <div class="card-image">
+                <div class="circle-decoration circle-1"></div>
+                <div class="circle-decoration circle-2"></div>
+                <div class="circle-decoration circle-3"></div>
                 <div class="logo-shine"></div>
                 <i class="fas fa-user-shield"></i>
+                <div class="brand-name">NOMIRE EXTERNAL</div>
                 <h3>Вітаємо!</h3>
                 <p>Створіть обліковий запис для доступу до всіх функцій нашого сервісу</p>
             </div>
             
             <!-- Права частина з формою -->
             <div class="card-content">
-                <h2>Створення облікового запису</h2>
-                <p class="subtitle">Зареєструйтесь для доступу до всіх функцій</p>
+                <h2><span class="nomire-label">Nomire</span> Створення облікового запису</h2>
+                <p class="subtitle">Зареєструйтесь для доступу до всіх функцій платформи</p>
                 
                 <div id="registration-form">
                     <div class="form-group">
@@ -465,13 +617,13 @@
                 </div>
                 
                 <div class="auth-links">
-                    Вже маєте обліковий запис?<a href="login.html">Увійти</a>
+                    Вже маєте обліковий запис? <a href="login.html">Увійти</a>
                 </div>
             </div>
         </div>
         
         <div class="footer">
-            <p>&copy; 2025 Усі права захищено | <a href="#">Політика конфіденційності</a> | <a href="#">Умови використання</a></p>
+            <p>&copy; 2025 Nomire External | Усі права захищено | <a href="#">Політика конфіденційності</a> | <a href="#">Умови використання</a></p>
         </div>
     </div>
 
