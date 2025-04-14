@@ -60,7 +60,7 @@
         }
         
         .logo-header {
-            position: absolute;
+            position: fixed; /* Змінено з absolute на fixed, щоб логотип не зміщувався */
             top: 30px;
             left: 50%;
             transform: translateX(-50%);
@@ -236,7 +236,7 @@
         h2 .nomire-label {
             color: var(--primary);
             font-weight: 700;
-            margin-right: 8px;
+            margin-left: 8px; /* Змінено з margin-right на margin-left */
         }
         
         p.subtitle {
