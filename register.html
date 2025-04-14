@@ -574,7 +574,7 @@
             
             <!-- Права частина з формою -->
             <div class="card-content">
-                <h2><span class="nomire-label">Nomire</span> Створення облікового запису</h2>
+                <h2>Створення облікового запису <span class="nomire-label">Nomire</span></h2>
                 <p class="subtitle">Зареєструйтесь для доступу до всіх функцій платформи</p>
                 
                 <div id="registration-form">
@@ -712,6 +712,12 @@
 
             registerMessage.innerHTML = "";
             registerMessage.className = "message";
+            
+            // Перевірка на заповнення всіх полів
+            if (!email && !password && !confirmPassword) {
+                showError("Будь ласка, заповніть всі поля");
+                return;
+            }
             
             // Валідація полів
             if (!email) {
