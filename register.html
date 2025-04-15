@@ -707,70 +707,80 @@
             const email = registerEmail.value.trim();
             const password = registerPassword.value;
             const confirmPassword = registerConfirmPassword.value;
+            
+            // Очищення попередніх повідомлень
             registerMessage.innerHTML = "";
             registerMessage.className = "message";
             
             // Перевірка на заповнення всіх полів
-            if (!email && !password && !confirmPassword) {
+            if (!email || !password || !confirmPassword) {
                 showError("Будь ласка, заповніть всі поля");
                 return;
             }
             
-            // Валідація полів
-            if (!email) {
-                showError("Будь ласка, введіть електронну пошту");
-                return;
-            }
-            
+            // Валідація електронної пошти
             if (!validateEmail(email)) {
                 showError("Введіть коректну електронну пошту");
                 return;
             }
             
-            if (!password) {
-                showError("Будь ласка, введіть пароль");
-                return;
-            }
-            
+            // Перевірка довжини паролю
             if (password.length < 6) {
                 showError("Пароль повинен містити щонайменше 6 символів");
                 return;
             }
             
-            if (!confirmPassword) {
-                showError("Будь ласка, підтвердіть пароль");
-                return;
-            }
-            // Перевірка паролів
+            // Перевірка співпадіння паролів
             if (password !== confirmPassword) {
                 showError("Паролі не співпадають");
                 return;
             }
+            
             // Зміна стану кнопки на "Завантаження"
             registerButton.disabled = true;
             registerButton.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Створення облікового запису...';
-            // Створення облікового запису
-            auth.createUserWithEmailAndPassword(email, password)
+            
+            // Перевірка існування облікового запису
+            auth.fetchSignInMethodsForEmail(email)
+                .then((signInMethods) => {
+                    // Якщо масив методів не порожній, значить обліковий запис вже існує
+                    if (signInMethods.length > 0) {
+                        showError("Ця електронна пошта вже використовується. Спробуйте іншу або увійдіть до свого облікового запису.");
+                        registerButton.disabled = false;
+                        registerButton.innerHTML = '<i class="fas fa-user-plus"></i> Зареєструватися';
+                        return Promise.reject("Обліковий запис вже існує");
+                    }
+                    
+                    // Якщо обліковий запис не існує, продовжуємо реєстрацію
+                    return auth.createUserWithEmailAndPassword(email, password);
+                })
                 .then((userCredential) => {
-                    // Відправка листа підтвердження
-                    userCredential.user.sendEmailVerification()
-                        .then(() => {
-                            showSuccess("Обліковий запис створено! Перевірте свою електронну пошту для підтвердження.");
-                            
-                            // Скидання форми
-                            document.getElementById('registration-form').reset();
-                            
-                            // Зберігаємо пароль тимчасово для можливості повторної відправки листа
-                            // в реальному проекті це може становити ризик безпеки, тому краще використовувати інші методи
-                            sessionStorage.setItem('tempPassword', password);
-                            
-                            // Перенаправлення на сторінку підтвердження
-                            setTimeout(function() {
-                                window.location.href = 'confirmation.html?email=' + encodeURIComponent(email);
-                            }, 1500);
-                        });
+                    // Успішна реєстрація, відправляємо лист підтвердження
+                    if (userCredential && userCredential.user) {
+                        return userCredential.user.sendEmailVerification()
+                            .then(() => {
+                                showSuccess("Обліковий запис створено! Перевірте свою електронну пошту для підтвердження.");
+                                
+                                // Скидання форми
+                                document.getElementById('registration-form').reset();
+                                
+                                // Зберігаємо email тимчасово для використання на сторінці підтвердження
+                                sessionStorage.setItem('registeredEmail', email);
+                                
+                                // Перенаправлення на сторінку підтвердження через 1.5 секунди
+                                setTimeout(function() {
+                                    window.location.href = 'confirmation.html?email=' + encodeURIComponent(email);
+                                }, 1500);
+                            });
+                    }
                 })
                 .catch((error) => {
+                    // Якщо помилка вже опрацьована в блоці вище, не показуємо її знову
+                    if (error === "Обліковий запис вже існує") {
+                        return;
+                    }
+                    
+                    // Опрацювання інших помилок Firebase
                     let errorMessage;
                     switch (error.code) {
                         case 'auth/email-already-in-use':
@@ -782,12 +792,14 @@
                         case 'auth/weak-password':
                             errorMessage = "Пароль надто слабкий. Використайте мінімум 6 символів.";
                             break;
+                        case 'auth/network-request-failed':
+                            errorMessage = "Помилка мережі. Перевірте ваше з'єднання з інтернетом.";
+                            break;
                         default:
                             errorMessage = "Виникла помилка: " + error.message;
                     }
                     showError(errorMessage);
-                })
-                .finally(() => {
+                    
                     // Відновлення стану кнопки
                     registerButton.disabled = false;
                     registerButton.innerHTML = '<i class="fas fa-user-plus"></i> Зареєструватися';
