@@ -707,7 +707,6 @@
             const email = registerEmail.value.trim();
             const password = registerPassword.value;
             const confirmPassword = registerConfirmPassword.value;
-
             registerMessage.innerHTML = "";
             registerMessage.className = "message";
             
@@ -742,17 +741,14 @@
                 showError("Будь ласка, підтвердіть пароль");
                 return;
             }
-
             // Перевірка паролів
             if (password !== confirmPassword) {
                 showError("Паролі не співпадають");
                 return;
             }
-
             // Зміна стану кнопки на "Завантаження"
             registerButton.disabled = true;
             registerButton.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Створення облікового запису...';
-
             // Створення облікового запису
             auth.createUserWithEmailAndPassword(email, password)
                 .then((userCredential) => {
@@ -764,10 +760,14 @@
                             // Скидання форми
                             document.getElementById('registration-form').reset();
                             
-                            // Перенаправлення на сторінку входу через 3 секунди
+                            // Зберігаємо пароль тимчасово для можливості повторної відправки листа
+                            // в реальному проекті це може становити ризик безпеки, тому краще використовувати інші методи
+                            sessionStorage.setItem('tempPassword', password);
+                            
+                            // Перенаправлення на сторінку підтвердження
                             setTimeout(function() {
-                                window.location.href = 'login.html';
-                            }, 3000);
+                                window.location.href = 'confirmation.html?email=' + encodeURIComponent(email);
+                            }, 1500);
                         });
                 })
                 .catch((error) => {
