@@ -553,6 +553,11 @@
     </style>
 </head>
 <body>
+    <div class="logo-header">
+        <i class="fas fa-shield-alt"></i>
+        NOMIRE EXTERNAL
+    </div>
+    
     <div class="container">
         <div class="card">
             <!-- Ліва частина з зображенням -->
@@ -622,18 +627,18 @@
         </div>
     </div>
 
-    <!-- Firebase SDK - Модульний підхід -->
+    <!-- Firebase SDK через CDN (правильні посилання) -->
     <script type="module">
-        // Імпорт потрібних модулів Firebase
-        import { initializeApp } from "https://cdnjs.cloudflare.com/ajax/libs/firebase/9.22.0/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, fetchSignInMethodsForEmail, sendEmailVerification } from "https://cdnjs.cloudflare.com/ajax/libs/firebase/9.22.0/firebase-auth.js";
+        // Імпорт Firebase SDK
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, fetchSignInMethodsForEmail, sendEmailVerification } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
 
         // Конфігурація Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyBX504xemLxE_eckV74-0jnPj4hJvK0DIw",
             authDomain: "my-project-external-fe5f4.firebaseapp.com",
             projectId: "my-project-external-fe5f4",
-            storageBucket: "my-project-external-fe5f4.appspot.com", // Виправлено URL
+            storageBucket: "my-project-external-fe5f4.appspot.com",
             messagingSenderId: "565933844021",
             appId: "1:565933844021:web:ddaf34e04ef1797252f37c",
             measurementId: "G-F7S76VLG9S"
@@ -652,18 +657,16 @@
         const passwordStrength = document.getElementById('password-strength');
         const registrationForm = document.getElementById('registration-form');
         
-        // Показати/приховати пароль
-        document.querySelectorAll('.toggle-password').forEach(icon => {
-            icon.addEventListener('click', function() {
-                const input = this.parentElement.querySelector('input');
-                const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
-                input.setAttribute('type', type);
-                
-                // Зміна іконки
-                const iconClass = type === 'password' ? 'far fa-eye' : 'far fa-eye-slash';
-                this.innerHTML = `<i class="${iconClass}"></i>`;
-            });
-        });
+        // Відображення повідомлень про помилки/успіхи
+        function showError(message) {
+            registerMessage.textContent = message;
+            registerMessage.className = "message error";
+        }
+        
+        function showSuccess(message) {
+            registerMessage.textContent = message;
+            registerMessage.className = "message success";
+        }
         
         // Перевірка сили паролю
         registerPassword.addEventListener('input', function() {
@@ -700,6 +703,25 @@
             } else {
                 return 'medium';
             }
+        }
+        
+        // Показати/приховати пароль
+        document.querySelectorAll('.toggle-password').forEach(icon => {
+            icon.addEventListener('click', function() {
+                const input = this.parentElement.querySelector('input');
+                const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+                input.setAttribute('type', type);
+                
+                // Зміна іконки
+                const iconClass = type === 'password' ? 'far fa-eye' : 'far fa-eye-slash';
+                this.innerHTML = `<i class="${iconClass}"></i>`;
+            });
+        });
+        
+        // Валідація електронної пошти
+        function validateEmail(email) {
+            const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return re.test(String(email).toLowerCase());
         }
 
         // Обробка реєстрації
@@ -743,80 +765,75 @@
                 registerButton.disabled = true;
                 registerButton.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Створення облікового запису...';
                 
-                // Перевірка існування облікового запису
-                const signInMethods = await fetchSignInMethodsForEmail(auth, email);
-                
-                // Якщо масив методів не порожній, значить обліковий запис вже існує
-                if (signInMethods && signInMethods.length > 0) {
-                    showError("Ця електронна пошта вже використовується. Спробуйте іншу або увійдіть до свого облікового запису.");
-                    registerButton.disabled = false;
-                    registerButton.innerHTML = '<i class="fas fa-user-plus"></i> Зареєструватися';
-                    return;
+                try {
+                    // Перевірка існування облікового запису (може викинути помилку, якщо Firebase не налаштовано)
+                    const signInMethods = await fetchSignInMethodsForEmail(auth, email);
+                    
+                    // Якщо масив методів не порожній, значить обліковий запис вже існує
+                    if (signInMethods && signInMethods.length > 0) {
+                        showError("Ця електронна пошта вже використовується. Спробуйте іншу або увійдіть до свого облікового запису.");
+                        registerButton.disabled = false;
+                        registerButton.innerHTML = '<i class="fas fa-user-plus"></i> Зареєструватися';
+                        return;
+                    }
+                    
+                    // Створення користувача
+                    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                    
+                    // Відправлення листа підтвердження
+                    await sendEmailVerification(userCredential.user);
+                    
+                    // Успішне створення
+                    showSuccess("Обліковий запис створено! Перевірте свою електронну пошту для підтвердження.");
+                    
+                    // Скидання форми
+                    registrationForm.reset();
+                    
+                    // Зберігаємо email тимчасово для використання на сторінці підтвердження
+                    sessionStorage.setItem('registeredEmail', email);
+                    
+                    // Перенаправлення на сторінку підтвердження через 1.5 секунди
+                    setTimeout(function() {
+                        window.location.href = 'confirmation.html?email=' + encodeURIComponent(email);
+                    }, 1500);
+                    
+                } catch (error) {
+                    console.error("Firebase помилка:", error);
+                    // Відобразимо повідомлення що є проблеми з сервером авторизації
+                    showError("Помилка підключення до сервера авторизації. Спробуйте пізніше або зв'яжіться з адміністратором.");
+                    } catch (error) {
+                    console.error("Firebase помилка:", error);
+                    // Відобразимо повідомлення що є проблеми з сервером авторизації
+                    showError("Помилка підключення до сервера авторизації. Спробуйте пізніше або зв'яжіться з адміністратором.");
+                    
+                    // Детальніша обробка помилок Firebase
+                    if (error.code === 'auth/email-already-in-use') {
+                        showError("Ця електронна пошта вже використовується. Спробуйте іншу або увійдіть до свого облікового запису.");
+                    } else if (error.code === 'auth/invalid-email') {
+                        showError("Введена електронна пошта має некоректний формат.");
+                    } else if (error.code === 'auth/weak-password') {
+                        showError("Пароль занадто слабкий. Використовуйте комбінацію літер, цифр і спеціальних символів.");
+                    }
                 }
                 
-                // Створення користувача
-                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                
-                // Відправлення листа підтвердження
-                await sendEmailVerification(userCredential.user);
-                
-                // Успішне створення
-                showSuccess("Обліковий запис створено! Перевірте свою електронну пошту для підтвердження.");
-                
-                // Скидання форми
-                registrationForm.reset();
-                
-                // Зберігаємо email тимчасово для використання на сторінці підтвердження
-                sessionStorage.setItem('registeredEmail', email);
-                
-                // Перенаправлення на сторінку підтвердження через 1.5 секунди
-                setTimeout(function() {
-                    window.location.href = 'confirmation.html?email=' + encodeURIComponent(email);
-                }, 1500);
-                
-            } catch (error) {
-                // Опрацювання помилок Firebase
-                let errorMessage;
-                switch (error.code) {
-                    case 'auth/email-already-in-use':
-                        errorMessage = "Ця електронна пошта вже використовується.";
-                        break;
-                    case 'auth/invalid-email':
-                        errorMessage = "Неправильний формат електронної пошти.";
-                        break;
-                    case 'auth/weak-password':
-                        errorMessage = "Пароль надто слабкий. Використайте мінімум 6 символів.";
-                        break;
-                    case 'auth/network-request-failed':
-                        errorMessage = "Помилка мережі. Перевірте ваше з'єднання з інтернетом.";
-                        break;
-                    default:
-                        errorMessage = "Виникла помилка: " + error.message;
-                }
-                showError(errorMessage);
-                console.error(error);
-            } finally {
                 // Відновлення стану кнопки
+                registerButton.disabled = false;
+                registerButton.innerHTML = '<i class="fas fa-user-plus"></i> Зареєструватися';
+                
+            } catch (e) {
+                console.error("Загальна помилка:", e);
+                showError("Сталася непередбачена помилка. Спробуйте пізніше.");
                 registerButton.disabled = false;
                 registerButton.innerHTML = '<i class="fas fa-user-plus"></i> Зареєструватися';
             }
         });
         
-        // Допоміжні функції
-        function showError(message) {
-            registerMessage.textContent = message;
-            registerMessage.className = "message error";
-        }
-        
-        function showSuccess(message) {
-            registerMessage.textContent = message;
-            registerMessage.className = "message success";
-        }
-        
-        function validateEmail(email) {
-            const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-            return re.test(String(email).toLowerCase());
-        }
+        // Додаємо можливість відправки форми при натисканні Enter
+        registrationForm.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                registerButton.click();
+            }
+        });
     </script>
 </body>
 </html>
