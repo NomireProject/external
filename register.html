@@ -3,1014 +3,782 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Реєстрація | Nomire External</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Реєстрація користувача</title>
     <style>
-        :root {
-            --primary: #4a6fa5;
-            --primary-dark: #345481;
-            --primary-light: #e8f0fe;
-            --primary-gradient: linear-gradient(135deg, #4a6fa5 0%, #345481 100%);
-            --primary-hover: linear-gradient(135deg, #3c5d8a 0%, #2a4369 100%);
-            --secondary: #5d8ce6;
-            --text: #2c3e50;
-            --text-light: #64748b;
-            --text-dark: #1e293b;
-            --error: #e53e3e;
-            --success: #10b981;
-            --border: #e2e8f0;
-            --border-focus: #94a3b8;
-            --shadow: rgba(15, 23, 42, 0.08);
-            --bg-color: #f8fafc;
-            --card-bg: #ffffff;
-            --card-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.01);
-            --input-bg: #f8fafc;
-            --input-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
-            --input-border: #e2e8f0;
-            --white: #ffffff;
-        }
-        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
+
         body {
-            font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
-            background: var(--bg-color);
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             min-height: 100vh;
             display: flex;
-            align-items: center;
             justify-content: center;
-            color: var(--text);
-            padding: 20px;
-            line-height: 1.5;
+            align-items: center;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 400px;
+            background-color: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
             position: relative;
-            overflow-x: hidden;
         }
-        
-        /* Enhanced background pattern */
-        body::before {
+
+        .form-container {
+            padding: 30px;
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #1a73e8;
+            position: relative;
+        }
+
+        .form-header h2 {
+            font-size: 28px;
+            font-weight: 600;
+        }
+
+        .form-header::after {
             content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(circle at 10% 20%, rgba(74, 111, 165, 0.06) 0%, transparent 30%),
-                radial-gradient(circle at 90% 80%, rgba(52, 84, 129, 0.04) 0%, transparent 40%),
-                radial-gradient(circle at 50% 50%, rgba(74, 111, 165, 0.03) 0%, transparent 60%),
-                linear-gradient(135deg, rgba(248, 250, 252, 0.8) 0%, rgba(233, 236, 239, 0.8) 100%);
-            z-index: -1;
-        }
-        
-        .logo-header {
-            position: fixed;
-            top: 24px;
+            position: absolute;
+            width: 50px;
+            height: 3px;
+            background-color: #1a73e8;
+            bottom: -10px;
             left: 50%;
             transform: translateX(-50%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--primary-dark);
-            z-index: 5;
-            animation: fadeInDown 0.8s ease forwards;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            letter-spacing: 0.5px;
+            border-radius: 10px;
         }
-        
-        .logo-header i {
-            margin-right: 12px;
-            font-size: 26px;
-            color: var(--primary);
-            filter: drop-shadow(0 2px 3px rgba(0,0,0,0.1));
-        }
-        
-        .container {
-            width: 100%;
-            max-width: 1000px;
+
+        .input-group {
             position: relative;
-            z-index: 1;
-            perspective: 1000px;
-            margin-top: 30px;
-        }
-        
-        .card {
-            background-color: var(--card-bg);
-            border-radius: 20px;
-            box-shadow: var(--card-shadow);
-            transition: all 0.5s cubic-bezier(0.215, 0.61, 0.355, 1);
-            overflow: hidden;
-            display: flex;
-            flex-direction: row;
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            transform-origin: center;
-            transform: rotateX(2deg) scale(0.98);
-            opacity: 0;
-            animation: cardAppear 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards 0.2s;
-            backdrop-filter: blur(5px);
-        }
-        
-        @keyframes cardAppear {
-            0% {
-                opacity: 0;
-                transform: rotateX(5deg) scale(0.96);
-            }
-            100% {
-                opacity: 1;
-                transform: rotateX(0deg) scale(1);
-            }
-        }
-        
-        .card:hover {
-            transform: translateY(-5px) scale(1.01);
-            box-shadow: 0 20px 30px rgba(0, 0, 0, 0.1);
-        }
-        
-        .card-image {
-            background: var(--primary-gradient);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 60px 40px;
-            color: white;
-            width: 45%;
-            flex-direction: column;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        /* Enhanced decorative elements for left panel */
-        .card-image::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0) 70%);
-            z-index: 0;
-        }
-        
-        .circle-decoration {
-            position: absolute;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.07);
-            z-index: 0;
-            transition: all 0.8s ease;
-        }
-        
-        .circle-1 {
-            width: 180px;
-            height: 180px;
-            top: -50px;
-            left: -50px;
-            animation: pulse 15s infinite alternate;
-        }
-        
-        .circle-2 {
-            width: 120px;
-            height: 120px;
-            bottom: 30px;
-            right: 30px;
-            animation: pulse 20s infinite alternate-reverse;
-        }
-        
-        .circle-3 {
-            width: 90px;
-            height: 90px;
-            top: 40%;
-            right: -25px;
-            opacity: 0.25;
-            animation: pulse 18s infinite alternate;
-        }
-        
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
-        }
-        
-        .card-image i {
-            font-size: 76px;
-            margin-bottom: 36px;
-            position: relative;
-            z-index: 1;
-            text-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-            animation: pulseIcon 3s infinite alternate;
-            background: linear-gradient(135deg, #ffffff 0%, rgba(255, 255, 255, 0.8) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
-        }
-        
-        @keyframes pulseIcon {
-            from { transform: scale(1); filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15)); }
-            to { transform: scale(1.06); filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.25)); }
-        }
-        
-        .card-image h3 {
-            font-size: 30px;
-            font-weight: 300;
-            margin-bottom: 20px;
-            position: relative;
-            z-index: 1;
-            letter-spacing: 0.5px;
-        }
-        
-        .card-image .brand-name {
-            font-size: 24px;
-            font-weight: 700;
             margin-bottom: 25px;
-            color: #fff;
-            letter-spacing: 1.5px;
-            position: relative;
-            z-index: 1;
-            animation: fadeIn 1s ease forwards 0.8s;
-            opacity: 0;
-            text-transform: uppercase;
         }
-        
-        .card-image p {
-            font-size: 16px;
-            opacity: 0.95;
-            line-height: 1.7;
-            position: relative;
-            z-index: 1;
-            max-width: 90%;
-            font-weight: 300;
-        }
-        
-        .card-content {
-            padding: 60px 50px;
-            width: 55%;
-            background-color: var(--card-bg);
-        }
-        
-        h2 {
-            font-size: 32px;
-            font-weight: 700;
-            margin-bottom: 16px;
-            color: var(--text-dark);
-            letter-spacing: -0.5px;
-            display: flex;
-            align-items: center;
-        }
-        
-        h2 .nomire-label {
-            color: var(--primary);
-            font-weight: 700;
-            margin-left: 8px;
-        }
-        
-        p.subtitle {
-            color: var(--text-light);
-            margin-bottom: 38px;
-            font-size: 17px;
-            letter-spacing: 0.2px;
-        }
-        
-        .form-group {
-            margin-bottom: 28px;
-            position: relative;
-            opacity: 0;
-            transform: translateY(20px);
-            animation: fadeInUp 0.5s ease forwards;
-        }
-        
-        .form-group:nth-child(1) { animation-delay: 0.4s; }
-        .form-group:nth-child(2) { animation-delay: 0.6s; }
-        .form-group:nth-child(3) { animation-delay: 0.8s; }
-        
-        @keyframes fadeInUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 10px;
-            font-size: 15px;
-            font-weight: 600;
-            color: var(--text-dark);
-            letter-spacing: 0.3px;
-        }
-        
-        .input-container {
-            position: relative;
-        }
-        
-        input {
+
+        .input-group input {
             width: 100%;
-            padding: 16px 20px;
+            padding: 15px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
             font-size: 16px;
-            border: 1px solid var(--input-border);
-            border-radius: 12px;
             transition: all 0.3s ease;
             outline: none;
-            background-color: var(--input-bg);
-            font-family: 'Montserrat', sans-serif;
-            box-shadow: var(--input-shadow);
         }
-        
-        input:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(74, 111, 165, 0.12);
-            background-color: #fff;
+
+        .input-group input:focus {
+            border-color: #1a73e8;
         }
-        
-        input::placeholder {
-            color: #a0aec0;
-            font-weight: 300;
-        }
-        
-        .input-icon {
+
+        .input-group label {
             position: absolute;
-            right: 18px;
             top: 50%;
             transform: translateY(-50%);
-            color: var(--text-light);
-            cursor: pointer;
-            transition: all 0.2s ease;
-            padding: 8px;
-        }
-        
-        .input-icon:hover {
-            color: var(--primary);
-        }
-        
-        .strength-meter {
-            height: 6px;
-            background-color: #edf2f7;
-            border-radius: 3px;
-            margin-top: 12px;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.4s ease;
-        }
-        
-        .strength-meter-fill {
-            height: 100%;
-            border-radius: 3px;
-            background-color: #ddd;
-            transition: width 0.4s ease, background-color 0.4s ease;
-        }
-        
-        .weak {
-            background-color: var(--error);
-            width: 33.33%;
-        }
-        
-        .medium {
-            background-color: #f59e0b;
-            width: 66.66%;
-        }
-        
-        .strong {
-            background-color: var(--success);
-            width: 100%;
-        }
-        
-        .password-hint {
-            font-size: 13px;
-            color: var(--text-light);
-            margin-top: 10px;
-            line-height: 1.5;
+            left: 15px;
+            color: #909090;
+            pointer-events: none;
             transition: all 0.3s ease;
         }
-        
-        .button {
-            background: var(--primary-gradient);
-            color: white;
-            border: none;
-            padding: 18px 24px;
-            border-radius: 12px;
+
+        .input-group input:focus + label,
+        .input-group input:valid + label {
+            top: 0;
+            left: 10px;
+            background-color: white;
+            padding: 0 5px;
+            font-size: 12px;
+            color: #1a73e8;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
             cursor: pointer;
-            width: 100%;
-            font-size: 17px;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            transition: all 0.3s ease;
+            color: #909090;
+        }
+
+        .validation-message {
+            font-size: 12px;
+            color: #d93025;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .requirement {
+            font-size: 12px;
+            color: #5f6368;
+            margin-top: 5px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 15px rgba(74, 111, 165, 0.25);
-            opacity: 0;
-            transform: translateY(20px);
-            animation: fadeInUp 0.5s ease forwards 1s;
+        }
+
+        .requirement.valid {
+            color: #34a853;
+        }
+
+        .requirement i {
+            font-size: 14px;
+            margin-right: 5px;
+        }
+
+        .button {
+            width: 100%;
+            padding: 15px;
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
             position: relative;
             overflow: hidden;
-            font-family: 'Montserrat', sans-serif;
         }
-        
-        .button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: 0.6s;
-        }
-        
-        .button:hover::before {
-            left: 100%;
-        }
-        
+
         .button:hover {
-            background: var(--primary-hover);
-            transform: translateY(-3px);
-            box-shadow: 0 7px 18px rgba(74, 111, 165, 0.35);
+            background-color: #0d62c9;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(26, 115, 232, 0.3);
         }
-        
+
         .button:active {
-            transform: translateY(1px);
-            box-shadow: 0 3px 10px rgba(74, 111, 165, 0.25);
+            transform: translateY(0);
         }
-        
-        .button i {
-            margin-right: 12px;
-            font-size: 20px;
-        }
-        
-        .message {
-            padding: 16px;
-            border-radius: 12px;
-            margin-top: 22px;
-            text-align: center;
-            font-size: 15px;
+
+        .button .loader {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             display: none;
-            animation: fadeIn 0.4s ease;
-            font-weight: 500;
-            line-height: 1.5;
         }
-        
-        .success {
-            background-color: rgba(16, 185, 129, 0.1);
-            color: var(--success);
+
+        .button .loader::after {
+            content: '';
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
             display: block;
-            border: 1px solid rgba(16, 185, 129, 0.2);
         }
-        
-        .error {
-            background-color: rgba(229, 62, 62, 0.1);
-            color: var(--error);
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .button.loading span {
+            visibility: hidden;
+        }
+
+        .button.loading .loader {
             display: block;
-            border: 1px solid rgba(229, 62, 62, 0.2);
         }
-        
-        .auth-links {
+
+        .auth-options {
+            margin-top: 20px;
             text-align: center;
-            margin-top: 32px;
-            font-size: 16px;
-            color: var(--text-light);
-            opacity: 0;
-            animation: fadeIn 0.5s ease forwards 1.2s;
-            padding: 16px 0;
         }
-        
-        .auth-links a {
-            color: var(--primary);
+
+        .auth-options p {
+            color: #5f6368;
+            margin-bottom: 15px;
+        }
+
+        .social-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .social-button {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f1f3f4;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .social-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .social-button i {
+            color: #1a73e8;
+            font-size: 18px;
+        }
+
+        .switch-form {
+            margin-top: 25px;
+            text-align: center;
+        }
+
+        .switch-form p {
+            color: #5f6368;
+        }
+
+        .switch-form a {
+            color: #1a73e8;
             text-decoration: none;
             font-weight: 600;
-            margin-left: 6px;
-            transition: color 0.3s ease;
-            position: relative;
+            transition: all 0.3s ease;
         }
-        
-        .auth-links a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: -2px;
-            left: 0;
-            background-color: var(--primary-dark);
-            transition: width 0.3s ease;
-        }
-        
-        .auth-links a:hover {
-            color: var(--primary-dark);
-        }
-        
-        .auth-links a:hover::after {
-            width: 100%;
-        }
-        
-        .footer {
-            text-align: center;
-            margin-top: 30px;
-            font-size: 14px;
-            color: var(--text-light);
-            opacity: 0;
-            animation: fadeIn 0.5s ease forwards 1.4s;
-            max-width: 80%;
-            margin-left: auto;
-            margin-right: auto;
-            padding-bottom: 20px;
-        }
-        
-        .footer a {
-            color: var(--primary);
-            text-decoration: none;
-            transition: color 0.3s ease;
-            font-weight: 500;
-        }
-        
-        .footer a:hover {
-            color: var(--primary-dark);
+
+        .switch-form a:hover {
             text-decoration: underline;
         }
+
+        .form-container.register {
+            display: block;
+        }
+
+        .form-container.login {
+            display: none;
+        }
+
+        .wave {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background-color: #1a73e8;
+            z-index: -1;
+        }
+
+        @keyframes wave {
+            0% { transform: translateX(-50%) scaleY(1); }
+            50% { transform: translateX(-50%) scaleY(0.8); }
+            100% { transform: translateX(-50%) scaleY(1); }
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 10px;
+            background-color: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transform: translateX(150%);
+            transition: transform 0.5s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+        }
+
+        .notification.success {
+            border-left: 5px solid #34a853;
+        }
+
+        .notification.error {
+            border-left: 5px solid #d93025;
+        }
+
+        .notification i {
+            margin-right: 10px;
+            font-size: 20px;
+        }
+
+        .notification.success i {
+            color: #34a853;
+        }
+
+        .notification.error i {
+            color: #d93025;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
         
-        /* Enhanced animations */
+        /* Додаткові анімації */
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
         }
         
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translate(-50%, -20px); }
-            to { opacity: 1; transform: translate(-50%, 0); }
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
         }
         
-        .logo-shine {
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 50px;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.4);
-            transform: skewX(-20deg);
-            animation: shine 5s infinite 1s;
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
         
-        @keyframes shine {
-            0% { left: -100%; }
-            20% { left: 100%; }
-            100% { left: 100%; }
-        }
-        
-        /* Better responsive design */
-        @media (max-width: 900px) {
-            .container {
-                max-width: 88%;
-            }
-            
-            .card-content, .card-image {
-                padding: 50px 40px;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .card {
-                flex-direction: column;
-                max-width: 500px;
-                margin: 0 auto;
-            }
-            
-            .card-image {
-                width: 100%;
-                padding: 50px 30px;
-                border-radius: 20px 20px 0 0;
-            }
-            
-            .card-content {
-                width: 100%;
-                padding: 50px 30px;
-                border-radius: 0 0 20px 20px;
-            }
-            
-            h2 {
-                font-size: 28px;
-            }
-            
-            .logo-header {
-                top: 16px;
-                font-size: 20px;
-            }
-            
-            .logo-header i {
-                font-size: 22px;
-            }
-            
-            .container {
-                margin-top: 60px;
-            }
-            
-            .card-image i {
-                font-size: 60px;
-                margin-bottom: 24px;
-            }
-            
-            .card-image h3 {
-                font-size: 26px;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .container {
-                max-width: 95%;
-                margin-top: 70px;
-            }
-            
-            .card-content, .card-image {
-                padding: 40px 24px;
-            }
-            
-            h2 {
-                font-size: 24px;
-            }
-            
-            p.subtitle {
-                font-size: 15px;
-                margin-bottom: 30px;
-            }
-            
-            .card-image i {
-                font-size: 50px;
-                margin-bottom: 20px;
-            }
-            
-            .card-image h3 {
-                font-size: 22px;
-            }
-            
-            .card-image .brand-name {
-                font-size: 20px;
-            }
-            
-            input {
-                padding: 15px 16px;
-                font-size: 15px;
-            }
-            
-            .button {
-                padding: 16px;
-                font-size: 16px;
-            }
-            
-            label {
-                font-size: 14px;
-            }
-            
-            .auth-links {
-                font-size: 15px;
-            }
-            
-            .footer {
-                font-size: 13px;
-                max-width: 95%;
-            }
-        }
-        
-        /* Touch device optimizations */
-        @media (hover: none) {
-            .input-icon {
-                padding: 10px;
-            }
-            
-            .button:hover {
-                transform: none;
-                box-shadow: 0 4px 15px rgba(74, 111, 165, 0.25);
-            }
-        }
-        
-        /* Loading animation */
-        .spinner {
-            animation: rotation 1s linear infinite;
-        }
-        
-        @keyframes rotation {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        /* Focus states for accessibility */
-        input:focus, .button:focus, .input-icon:focus {
-            outline: 3px solid rgba(74, 111, 165, 0.2);
-            outline-offset: 1px;
-        }
-        
-        /* Improved input-field animation */
-        input {
-            transition: border-color 0.3s, box-shadow 0.3s, transform 0.2s;
-        }
-        
-        input:focus {
-            transform: translateY(-2px);
+        .slide-up {
+            animation: slideUp 0.5s ease forwards;
         }
     </style>
+    <!-- Підключаємо іконки Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div class="logo-header animate__animated animate__fadeInDown">
-        <i class="fas fa-shield-alt"></i>
-        NOMIRE EXTERNAL
-    </div>
-    
     <div class="container">
-        <div class="card">
-            <!-- Left section with image -->
-            <div class="card-image">
-                <div class="circle-decoration circle-1"></div>
-                <div class="circle-decoration circle-2"></div>
-                <div class="circle-decoration circle-3"></div>
-                <div class="logo-shine"></div>
-                <i class="fas fa-user-shield"></i>
-                <div class="brand-name">NOMIRE EXTERNAL</div>
-                <h3>Вітаємо!</h3>
-                <p>Створіть обліковий запис для безпечного доступу до всіх функцій нашої платформи</p>
+        <div class="form-container register">
+            <div class="form-header">
+                <h2>Реєстрація</h2>
             </div>
-            
-            <!-- Right section with form -->
-            <div class="card-content">
-                <h2>Створення облікового запису <span class="nomire-label">Nomire</span></h2>
-                <p class="subtitle">Зареєструйтесь для доступу до всіх функцій платформи</p>
-                
-                <form id="registration-form">
-                    <div class="form-group">
-                        <label for="register-email">Електронна пошта</label>
-                        <div class="input-container">
-                            <input type="email" id="register-email" placeholder="Введіть вашу електронну пошту" required autocomplete="email">
-                            <span class="input-icon" aria-hidden="true">
-                                <i class="far fa-envelope"></i>
-                            </span>
+            <form id="register-form">
+                <div class="input-group">
+                    <input type="text" id="register-username" required>
+                    <label for="register-username">Ім'я користувача</label>
+                    <div class="validation-message" id="username-validation"></div>
+                </div>
+                <div class="input-group">
+                    <input type="email" id="register-email" required>
+                    <label for="register-email">Email</label>
+                    <div class="validation-message" id="email-validation"></div>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="register-password" required>
+                    <label for="register-password">Пароль</label>
+                    <div class="password-toggle" id="register-password-toggle">
+                        <i class="fa-regular fa-eye"></i>
+                    </div>
+                    <div class="validation-message" id="password-validation"></div>
+                    <div class="requirements">
+                        <div class="requirement" id="length-requirement">
+                            <i class="fa-regular fa-circle"></i> Мінімум 8 символів
+                        </div>
+                        <div class="requirement" id="uppercase-requirement">
+                            <i class="fa-regular fa-circle"></i> Хоча б одна велика літера
+                        </div>
+                        <div class="requirement" id="lowercase-requirement">
+                            <i class="fa-regular fa-circle"></i> Хоча б одна мала літера
+                        </div>
+                        <div class="requirement" id="number-requirement">
+                            <i class="fa-regular fa-circle"></i> Хоча б одна цифра
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="register-password">Пароль</label>
-                        <div class="input-container">
-                            <input type="password" id="register-password" placeholder="Створіть надійний пароль" required autocomplete="new-password">
-                            <span class="input-icon toggle-password" role="button" tabindex="0" aria-label="Показати пароль">
-                                <i class="far fa-eye"></i>
-                            </span>
-                        </div>
-                        <div class="strength-meter">
-                            <div class="strength-meter-fill" id="password-strength"></div>
-                        </div>
-                        <p class="password-hint">Пароль повинен містити мінімум 8 символів, включаючи літери, цифри та спеціальні символи</p>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="register-confirm-password" required>
+                    <label for="register-confirm-password">Підтвердження паролю</label>
+                    <div class="password-toggle" id="register-confirm-password-toggle">
+                        <i class="fa-regular fa-eye"></i>
                     </div>
-                    <div class="form-group">
-                        <label for="register-confirm-password">Підтвердження паролю</label>
-                        <div class="input-container">
-                            <input type="password" id="register-confirm-password" placeholder="Повторіть пароль" required autocomplete="new-password">
-                            <span class="input-icon toggle-password" role="button" tabindex="0" aria-label="Показати пароль">
-                                <i class="far fa-eye"></i>
-                            </span>
-                        </div>
+                    <div class="validation-message" id="confirm-password-validation"></div>
+                </div>
+                <button type="submit" class="button" id="register-button">
+                    <span>Зареєструватися</span>
+                    <div class="loader"></div>
+                </button>
+            </form>
+            <div class="auth-options">
+                <p>Або увійти через</p>
+                <div class="social-buttons">
+                    <div class="social-button" id="google-login">
+                        <i class="fab fa-google"></i>
                     </div>
-                    <button type="button" id="register-button" class="button">
-                        <i class="fas fa-user-plus"></i>
-                        Зареєструватися
-                    </button>
-                    <div id="register-message" class="message" role="alert"></div>
-                </form>
-                
-                <div class="auth-links">
-                    Вже маєте обліковий запис? <a href="login.html">Увійти</a>
+                    <div class="social-button" id="facebook-login">
+                        <i class="fab fa-facebook-f"></i>
+                    </div>
                 </div>
             </div>
+            <div class="switch-form">
+                <p>Вже маєте обліковий запис? <a href="#" id="switch-to-login">Увійти</a></p>
+            </div>
         </div>
-        
-        <div class="footer">
-            <p>&copy; 2025 Nomire External | Усі права захищено | <a href="#">Політика конфіденційності</a> | <a href="#">Умови використання</a></p>
+        <div class="form-container login">
+            <div class="form-header">
+                <h2>Вхід</h2>
+            </div>
+            <form id="login-form">
+                <div class="input-group">
+                    <input type="email" id="login-email" required>
+                    <label for="login-email">Email</label>
+                    <div class="validation-message" id="login-email-validation"></div>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="login-password" required>
+                    <label for="login-password">Пароль</label>
+                    <div class="password-toggle" id="login-password-toggle">
+                        <i class="fa-regular fa-eye"></i>
+                    </div>
+                    <div class="validation-message" id="login-password-validation"></div>
+                </div>
+                <div class="forgot-password">
+                    <a href="#" id="forgot-password">Забули пароль?</a>
+                </div>
+                <button type="submit" class="button" id="login-button">
+                    <span>Увійти</span>
+                    <div class="loader"></div>
+                </button>
+            </form>
+            <div class="auth-options">
+                <p>Або увійти через</p>
+                <div class="social-buttons">
+                    <div class="social-button" id="google-login-alt">
+                        <i class="fab fa-google"></i>
+                    </div>
+                    <div class="social-button" id="facebook-login-alt">
+                        <i class="fab fa-facebook-f"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="switch-form">
+                <p>Немає облікового запису? <a href="#" id="switch-to-register">Зареєструватися</a></p>
+            </div>
         </div>
     </div>
 
-    <!-- Firebase SDK via CDN (optimized) -->
-    <script type="module">
-        // Import Firebase SDK
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, fetchSignInMethodsForEmail, sendEmailVerification } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i>
+        <span id="notification-message"></span>
+    </div>
 
-        // Firebase configuration
+    <!-- Підключаємо Firebase -->
+    <script type="module">
+        import { initializeApp } from "https://cdnjs.cloudflare.com/ajax/libs/firebase/9.23.0/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, FacebookAuthProvider, signInWithPopup, sendPasswordResetEmail } from "https://cdnjs.cloudflare.com/ajax/libs/firebase/9.23.0/firebase-auth.js";
+        import { getAnalytics } from "https://cdnjs.cloudflare.com/ajax/libs/firebase/9.23.0/firebase-analytics.js";
+
+        // Конфігурація Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyBX504xemLxE_eckV74-0jnPj4hJvK0DIw",
             authDomain: "my-project-external-fe5f4.firebaseapp.com",
             projectId: "my-project-external-fe5f4",
-            storageBucket: "my-project-external-fe5f4.appspot.com",
+            storageBucket: "my-project-external-fe5f4.firebasestorage.app",
             messagingSenderId: "565933844021",
             appId: "1:565933844021:web:ddaf34e04ef1797252f37c",
             measurementId: "G-F7S76VLG9S"
         };
 
-        // Initialize Firebase
+        // Ініціалізація Firebase
         const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
         const auth = getAuth(app);
+        const googleProvider = new GoogleAuthProvider();
+        const facebookProvider = new FacebookAuthProvider();
 
-        // Form elements
-        const registerEmail = document.getElementById('register-email');
-        const registerPassword = document.getElementById('register-password');
-        const registerConfirmPassword = document.getElementById('register-confirm-password');
-        const registerButton = document.getElementById('register-button');
-        const registerMessage = document.getElementById('register-message');
-        const passwordStrength = document.getElementById('password-strength');
-        const registrationForm = document.getElementById('registration-form');
-        const passwordHint = document.querySelector('.password-hint');
-        
-        // Error/success message display
-        function showError(message) {
-            registerMessage.textContent = message;
-            registerMessage.className = "message error";
-            registerMessage.setAttribute('aria-live', 'assertive');
-        }
-        
-        function showSuccess(message) {
-            registerMessage.textContent = message;
-            registerMessage.className = "message success";
-            registerMessage.setAttribute('aria-live', 'assertive');
-        }
-        
-        // Password strength checker
-        registerPassword.addEventListener('input', function() {
-            const password = this.value;
-            const strength = checkPasswordStrength(password);
+        // DOM елементи
+        const registerForm = document.getElementById('register-form');
+        const loginForm = document.getElementById('login-form');
+        const registerContainer = document.querySelector('.form-container.register');
+        const loginContainer = document.querySelector('.form-container.login');
+        const switchToLogin = document.getElementById('switch-to-login');
+        const switchToRegister = document.getElementById('switch-to-register');
+        const googleLoginButtons = document.querySelectorAll('#google-login, #google-login-alt');
+        const facebookLoginButtons = document.querySelectorAll('#facebook-login, #facebook-login-alt');
+        const forgotPasswordLink = document.getElementById('forgot-password');
+        const notification = document.getElementById('notification');
+        const notificationMessage = document.getElementById('notification-message');
+
+        // Перемикання між формами
+        switchToLogin.addEventListener('click', (e) => {
+            e.preventDefault();
+            registerContainer.style.display = 'none';
+            loginContainer.style.display = 'block';
+            loginContainer.classList.add('fade-in');
+        });
+
+        switchToRegister.addEventListener('click', (e) => {
+            e.preventDefault();
+            loginContainer.style.display = 'none';
+            registerContainer.style.display = 'block';
+            registerContainer.classList.add('fade-in');
+        });
+
+        // Валідація паролю
+        const passwordInput = document.getElementById('register-password');
+        const confirmPasswordInput = document.getElementById('register-confirm-password');
+        const lengthRequirement = document.getElementById('length-requirement');
+        const uppercaseRequirement = document.getElementById('uppercase-requirement');
+        const lowercaseRequirement = document.getElementById('lowercase-requirement');
+        const numberRequirement = document.getElementById('number-requirement');
+
+        passwordInput.addEventListener('input', validatePassword);
+        confirmPasswordInput.addEventListener('input', validateConfirmPassword);
+
+        function validatePassword() {
+            const password = passwordInput.value;
             
-            // Reset classes
-            passwordStrength.classList.remove('weak', 'medium', 'strong');
+            // Перевіряємо вимоги до паролю
+            const hasLength = password.length >= 8;
+            const hasUppercase = /[A-Z]/.test(password);
+            const hasLowercase = /[a-z]/.test(password);
+            const hasNumber = /[0-9]/.test(password);
             
-            if (password.length === 0) {
-                passwordStrength.style.width = '0';
-                passwordHint.textContent = "Пароль повинен містити мінімум 8 символів, включаючи літери, цифри та спеціальні символи";
+            // Оновлюємо статус вимог
+            updateRequirement(lengthRequirement, hasLength);
+            updateRequirement(uppercaseRequirement, hasUppercase);
+            updateRequirement(lowercaseRequirement, hasLowercase);
+            updateRequirement(numberRequirement, hasNumber);
+            
+            return hasLength && hasUppercase && hasLowercase && hasNumber;
+        }
+
+        function validateConfirmPassword() {
+            const password = passwordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+            const confirmPasswordValidation = document.getElementById('confirm-password-validation');
+            
+            if (password !== confirmPassword) {
+                confirmPasswordValidation.textContent = 'Паролі не співпадають';
+                confirmPasswordValidation.style.display = 'block';
+                return false;
+            } else {
+                confirmPasswordValidation.style.display = 'none';
+                return true;
+            }
+        }
+
+        function updateRequirement(element, isValid) {
+            if (isValid) {
+                element.classList.add('valid');
+                element.querySelector('i').className = 'fa-solid fa-check';
+            } else {
+                element.classList.remove('valid');
+                element.querySelector('i').className = 'fa-regular fa-circle';
+            }
+        }
+
+        // Показ/приховування паролю
+        document.querySelectorAll('.password-toggle').forEach(toggle => {
+            toggle.addEventListener('click', (e) => {
+                const button = e.currentTarget;
+                const input = button.parentElement.querySelector('input');
+                const icon = button.querySelector('i');
+                
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    icon.className = 'fa-regular fa-eye-slash';
+                } else {
+                    input.type = 'password';
+                    icon.className = 'fa-regular fa-eye';
+                }
+            });
+        });
+
+        // Реєстрація користувача
+        registerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            const username = document.getElementById('register-username').value;
+            const registerButton = document.getElementById('register-button');
+            
+            // Перевірка валідності паролю
+            if (!validatePassword()) {
+                showNotification('Пароль не відповідає вимогам безпеки', 'error');
                 return;
             }
             
-            if (strength === 'weak') {
-                passwordStrength.classList.add('weak');
-                passwordHint.textContent = "Слабкий пароль. Додайте цифри, спеціальні символи та великі літери.";
-            } else if (strength === 'medium') {
-                passwordStrength.classList.add('medium');
-                passwordHint.textContent = "Середній пароль. Для підвищення безпеки додайте ще кілька символів.";
-            } else {
-                passwordStrength.classList.add('strong');
-                passwordHint.textContent = "Надійний пароль. Ваш обліковий запис буде добре захищеним.";
+            // Перевірка підтвердження паролю
+            if (!validateConfirmPassword()) {
+                return;
+            }
+            
+            // Встановлюємо кнопку в стан завантаження
+            registerButton.classList.add('loading');
+            
+            try {
+                // Створюємо користувача у Firebase
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                
+                // Очищуємо форму після успішної реєстрації
+                registerForm.reset();
+                
+                showNotification('Реєстрація успішна! Ви можете увійти в систему.', 'success');
+                
+                // Перемикаємо на форму входу
+                setTimeout(() => {
+                    switchToLogin.click();
+                }, 2000);
+                
+                console.log('Користувач зареєстрований:', userCredential.user);
+            } catch (error) {
+                let errorMessage;
+                
+                switch (error.code) {
+                    case 'auth/email-already-in-use':
+                        errorMessage = 'Цей email вже використовується';
+                        break;
+                    case 'auth/invalid-email':
+                        errorMessage = 'Неправильний формат email';
+                        break;
+                    case 'auth/weak-password':
+                        errorMessage = 'Пароль занадто слабкий';
+                        break;
+                    default:
+                        errorMessage = 'Помилка під час реєстрації';
+                }
+                
+                showNotification(errorMessage, 'error');
+                console.error('Помилка реєстрації:', error);
+            } finally {
+                // Прибираємо стан завантаження
+                registerButton.classList.remove('loading');
             }
         });
-        
-        function checkPasswordStrength(password) {
-            // Password strength rules
-            const hasNumber = /\d/.test(password);
-            function checkPasswordStrength(password) {
-    // Password strength rules
-    const hasNumber = /\d/.test(password);
-    const hasLowerCase = /[a-z]/.test(password);
-    const hasUpperCase = /[A-Z]/.test(password);
-    const hasSpecialChar = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password);
-    const isLongEnough = password.length >= 8;
-    
-    // Calculate strength
-    let strength = 0;
-    if (hasLowerCase) strength++;
-    if (hasUpperCase) strength++;
-    if (hasNumber) strength++;
-    if (hasSpecialChar) strength++;
-    if (isLongEnough) strength++;
-    
-    // Determine strength level
-    if (password.length < 6 || strength <= 2) {
-        return 'weak';
-    } else if (strength <= 4) {
-        return 'medium';
-    } else {
-        return 'strong';
-    }
-}
 
-// Toggle password visibility
-const toggleButtons = document.querySelectorAll('.toggle-password');
-toggleButtons.forEach(button => {
-    button.addEventListener('click', function() {
-        const input = this.parentElement.querySelector('input');
-        const icon = this.querySelector('i');
-        
-        if (input.type === 'password') {
-            input.type = 'text';
-            icon.classList.remove('fa-eye');
-            icon.classList.add('fa-eye-slash');
-        } else {
-            input.type = 'password';
-            icon.classList.remove('fa-eye-slash');
-            icon.classList.add('fa-eye');
-        }
-    });
-});
-
-// Registration form submission
-registerButton.addEventListener('click', async function() {
-    // Clear previous messages
-    registerMessage.className = "message";
-    registerMessage.textContent = "";
-    
-    // Form validation
-    const email = registerEmail.value.trim();
-    const password = registerPassword.value;
-    const confirmPassword = registerConfirmPassword.value;
-    
-    if (!email || !password || !confirmPassword) {
-        showError("Будь ласка, заповніть всі поля форми");
-        return;
-    }
-    
-    // Email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-        showError("Будь ласка, введіть коректну електронну пошту");
-        return;
-    }
-    
-    // Password validation
-    if (password.length < 8) {
-        showError("Пароль повинен містити не менше 8 символів");
-        return;
-    }
-    
-    const passwordStrength = checkPasswordStrength(password);
-    if (passwordStrength === 'weak') {
-        showError("Пароль занадто слабкий. Додайте цифри, спеціальні символи та великі літери");
-        return;
-    }
-    
-    // Password confirmation
-    if (password !== confirmPassword) {
-        showError("Паролі не співпадають");
-        return;
-    }
-    
-    // Change button to loading state
-    const originalButtonText = registerButton.innerHTML;
-    registerButton.innerHTML = '<i class="fas fa-spinner spinner"></i> Реєстрація...';
-    registerButton.disabled = true;
-    
-    try {
-        // Check if email already exists
-        const signInMethods = await fetchSignInMethodsForEmail(auth, email);
-        if (signInMethods.length > 0) {
-            showError("Користувач з такою електронною поштою вже існує");
-            registerButton.innerHTML = originalButtonText;
-            registerButton.disabled = false;
-            return;
-        }
-        
-        // Create user
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        const user = userCredential.user;
-        
-        // Send email verification
-        await sendEmailVerification(user);
-        
-        // Success message
-        showSuccess("Реєстрація успішна! Будь ласка, перевірте вашу електронну пошту для підтвердження облікового запису");
-        
-        // Reset form
-        registrationForm.reset();
-        passwordStrength.style.width = '0';
-        passwordStrength.className = 'strength-meter-fill';
-        
-        // Redirect after delay
-        setTimeout(() => {
-            window.location.href = 'login.html';
-        }, 3000);
-        
-    } catch (error) {
-        // Handle errors
-        let errorMessage = "Помилка при реєстрації. Спробуйте ще раз пізніше";
-        
-        if (error.code === 'auth/email-already-in-use') {
-            errorMessage = "Користувач з такою електронною поштою вже існує";
-        } else if (error.code === 'auth/invalid-email') {
-            errorMessage = "Некоректна електронна пошта";
-        } else if (error.code === 'auth/weak-password') {
-            errorMessage = "Пароль занадто слабкий";
-        } else if (error.code === 'auth/network-request-failed') {
-            errorMessage = "Проблема з мережевим підключенням. Перевірте з'єднання з інтернетом";
-        }
-        
-        showError(errorMessage);
-        console.error("Registration error:", error);
-    } finally {
-        // Restore button state
-        registerButton.innerHTML = originalButtonText;
-        registerButton.disabled = false;
-    }
-});
-    
-    // Allow form submission with Enter key
-    registrationForm.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
+        // Вхід користувача
+        loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            registerButton.click();
-        }
-    });
-</script>
+            
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            const loginButton = document.getElementById('login-button');
+            
+            // Встановлюємо кнопку в стан завантаження
+            loginButton.classList.add('loading');
+            
+            try {
+                // Авторизація користувача у Firebase
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                
+                // Очищуємо форму після успішного входу
+                loginForm.reset();
+                
+                showNotification('Вхід успішний!', 'success');
+                
+                console.log('Користувач увійшов:', userCredential.user);
+                
+                // Тут можна додати перенаправлення на захищені сторінки
+                // window.location.href = 'dashboard.html';
+            } catch (error) {
+                let errorMessage;
+                
+                switch (error.code) {
+                    case 'auth/user-not-found':
+                    case 'auth/wrong-password':
+                        errorMessage = 'Неправильний email або пароль';
+                        break;
+                    case 'auth/invalid-email':
+                        errorMessage = 'Неправильний формат email';
+                        break;
+                    case 'auth/user-disabled':
+                        errorMessage = 'Обліковий запис відключено';
+                        break;
+                    default:
+                        errorMessage = 'Помилка входу';
+                }
+                
+                showNotification(errorMessage, 'error');
+                console.error('Помилка входу:', error);
+            } finally {
+                // Прибираємо стан завантаження
+                loginButton.classList.remove('loading');
+            }
+        });
 
+        // Авторизація через Google
+        googleLoginButtons.forEach(button => {
+            button.addEventListener('click', async () => {
+                try {
+                    const result = await signInWithPopup(auth, googleProvider);
+                    showNotification('Успішний вхід через Google!', 'success');
+                    console.log('Google авторизація:', result.user);
+                    
+                    // Тут можна додати перенаправлення на захищені сторінки
+                    // window.location.href = 'dashboard.html';
+                } catch (error) {
+                    showNotification('Помилка авторизації через Google', 'error');
+                    console.error('Помилка Google авторизації:', error);
+                }
+            });
+        });
+
+        // Авторизація через Facebook
+        facebookLoginButtons.forEach(button => {
+            button.addEventListener('click', async () => {
+                try {
+                    const result = await signInWithPopup(auth, facebookProvider);
+                    showNotification('Успішний вхід через Facebook!', 'success');
+                    console.log('Facebook авторизація:', result.user);
+                    
+                    // Тут можна додати перенаправлення на захищені сторінки
+                    // window.location.href = 'dashboard.html';
+                } catch (error) {
+                    showNotification('Помилка авторизації через Facebook', 'error');
+                    console.error('Помилка Facebook авторизації:', error);
+                }
+            });
+        });
+
+        // Відновлення паролю
+        forgotPasswordLink.addEventListener('click', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('login-email').value;
+            
+            if (!email) {
+                showNotification('Введіть email для відновлення паролю', 'error');
+                return;
+            }
+            
+            try {
+                await sendPasswordResetEmail(auth, email);
+                showNotification('Інструкції з відновлення паролю надіслано на ваш email', 'success');
+            } catch (error) {
+                let errorMessage;
+                
+                switch (error.code) {
+                    case 'auth/user-not-found':
+                        errorMessage = 'Користувача з таким email не знайдено';
+                        break;
+                    case 'auth/invalid-email':
+                        errorMessage = 'Неправильний формат email';
+                        break;
+                    default:
+                        errorMessage = 'Помилка відновлення паролю';
+                }
+                
+                showNotification(errorMessage, 'error');
+                console.error('Помилка відновлення паролю:', error);
+            }
+        });
+
+        // Показати повідомлення
+        function showNotification(message, type) {
+            notificationMessage.textContent = message;
+            notification.className = 'notification';
+            notification.classList.add(type);
+            notification.classList.add('show');
+            
+            const icon = notification.querySelector('i');
+            if (type === 'success') {
+                icon.className = 'fas fa-check-circle';
+            } else {
+                icon.className = 'fas fa-exclamation-circle';
+            }
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Додаємо анімації на елементи при наведенні
+        const animateElements = document.querySelectorAll('.input-group, .button, .social-button');
+        
+        animateElements.forEach(element => {
+            element.addEventListener('mouseenter', () => {
+                element.classList.add('slide-up');
+                setTimeout(() => {
+                    element.classList.remove('slide-up');
+                }, 500);
+            });
+        });
+    </script>
 </body>
 </html>
