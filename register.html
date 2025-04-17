@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Реєстрація користувача</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 400px;
+            background-color: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .form-container {
+            padding: 30px;
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #1a73e8;
+            position: relative;
+        }
+
+        .form-header h2 {
+            font-size: 28px;
+            font-weight: 600;
+        }
+
+        .form-header::after {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 3px;
+            background-color: #1a73e8;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 10px;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 15px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .input-group input:focus {
+            border-color: #1a73e8;
+        }
+
+        .input-group label {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            left: 15px;
+            color: #909090;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus + label,
+        .input-group input:valid + label {
+            top: 0;
+            left: 10px;
+            background-color: white;
+            padding: 0 5px;
+            font-size: 12px;
+            color: #1a73e8;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #909090;
+        }
+
+        .validation-message {
+            font-size: 12px;
+            color: #d93025;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .requirement {
+            font-size: 12px;
+            color: #5f6368;
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        .requirement.valid {
+            color: #34a853;
+        }
+
+        .requirement i {
+            font-size: 14px;
+            margin-right: 5px;
+        }
+
+        .button {
+            width: 100%;
+            padding: 15px;
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .button:hover {
+            background-color: #0d62c9;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(26, 115, 232, 0.3);
+        }
+
+        .button:active {
+            transform: translateY(0);
+        }
+
+        .button .loader {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+        }
+
+        .button .loader::after {
+            content: '';
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            display: block;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .button.loading span {
+            visibility: hidden;
+        }
+
+        .button.loading .loader {
+            display: block;
+        }
+
+        .auth-options {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .auth-options p {
+            color: #5f6368;
+            margin-bottom: 15px;
+        }
+
+        .social-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .social-button {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f1f3f4;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .social-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .social-button i {
+            color: #1a73e8;
+            font-size: 18px;
+        }
+
+        .switch-form {
+            margin-top: 25px;
+            text-align: center;
+        }
+
+        .switch-form p {
+            color: #5f6368;
+        }
+
+        .switch-form a {
+            color: #1a73e8;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .switch-form a:hover {
+            text-decoration: underline;
+        }
+
+        .form-container.register {
+            display: block;
+        }
+
+        .form-container.login {
+            display: none;
+        }
+
+        .wave {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background-color: #1a73e8;
+            z-index: -1;
+        }
+
+        @keyframes wave {
+            0% { transform: translateX(-50%) scaleY(1); }
+            50% { transform: translateX(-50%) scaleY(0.8); }
+            100% { transform: translateX(-50%) scaleY(1); }
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 10px;
+            background-color: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transform: translateX(150%);
+            transition: transform 0.5s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+        }
+
+        .notification.success {
+            border-left: 5px solid #34a853;
+        }
+
+        .notification.error {
+            border-left: 5px solid #d93025;
+        }
+
+        .notification i {
+            margin-right: 10px;
+            font-size: 20px;
+        }
+
+        .notification.success i {
+            color: #34a853;
+        }
+
+        .notification.error i {
+            color: #d93025;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        /* Додаткові анімації */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .slide-up {
+            animation: slideUp 0.5s ease forwards;
+        }
+    </style>
+    <!-- Підключаємо іконки Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="form-container register">
+            <div class="form-header">
+                <h2>Реєстрація</h2>
+            </div>
+            <form id="register-form">
+                <div class="input-group">
+                    <input type="text" id="register-username" required>
+                    <label for="register-username">Ім'я користувача</label>
+                    <div class="validation-message" id="username-validation"></div>
+                </div>
+                <div class="input-group">
+                    <input type="email" id="register-email" required>
+                    <label for="register-email">Email</label>
+                    <div class="validation-message" id="email-validation"></div>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="register-password" required>
+                    <label for="register-password">Пароль</label>
+                    <div class="password-toggle" id="register-password-toggle">
+                        <i class="fa-regular fa-eye"></i>
+                    </div>
+                    <div class="validation-message" id="password-validation"></div>
+                    <div class="requirements">
+                        <div class="requirement" id="length-requirement">
+                            <i class="fa-regular fa-circle"></i> Мінімум 8 символів
+                        </div>
+                        <div class="requirement" id="uppercase-requirement">
+                            <i class="fa-regular fa-circle"></i> Хоча б одна велика літера
+                        </div>
+                        <div class="requirement" id="lowercase-requirement">
+                            <i class="fa-regular fa-circle"></i> Хоча б одна мала літера
+                        </div>
+                        <div class="requirement" id="number-requirement">
+                            <i class="fa-regular fa-circle"></i> Хоча б одна цифра
+                        </div>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="register-confirm-password" required>
+                    <label for="register-confirm-password">Підтвердження паролю</label>
+                    <div class="password-toggle" id="register-confirm-password-toggle">
+                        <i class="fa-regular fa-eye"></i>
+                    </div>
+                    <div class="validation-message" id="confirm-password-validation"></div>
+                </div>
+                <button type="submit" class="button" id="register-button">
+                    <span>Зареєструватися</span>
+                    <div class="loader"></div>
+                </button>
+            </form>
+            <div class="auth-options">
+                <p>Або увійти через</p>
+                <div class="social-buttons">
+                    <div class="social-button" id="google-login">
+                        <i class="fab fa-google"></i>
+                    </div>
+                    <div class="social-button" id="facebook-login">
+                        <i class="fab fa-facebook-f"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="switch-form">
+                <p>Вже маєте обліковий запис? <a href="#" id="switch-to-login">Увійти</a></p>
+            </div>
+        </div>
+        <div class="form-container login">
+            <div class="form-header">
+                <h2>Вхід</h2>
+            </div>
+            <form id="login-form">
+                <div class="input-group">
+                    <input type="email" id="login-email" required>
+                    <label for="login-email">Email</label>
+                    <div class="validation-message" id="login-email-validation"></div>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="login-password" required>
+                    <label for="login-password">Пароль</label>
+                    <div class="password-toggle" id="login-password-toggle">
+                        <i class="fa-regular fa-eye"></i>
+                    </div>
+                    <div class="validation-message" id="login-password-validation"></div>
+                </div>
+                <div class="forgot-password">
+                    <a href="#" id="forgot-password">Забули пароль?</a>
+                </div>
+                <button type="submit" class="button" id="login-button">
+                    <span>Увійти</span>
+                    <div class="loader"></div>
+                </button>
+            </form>
+            <div class="auth-options">
+                <p>Або увійти через</p>
+                <div class="social-buttons">
+                    <div class="social-button" id="google-login-alt">
+                        <i class="fab fa-google"></i>
+                    </div>
+                    <div class="social-button" id="facebook-login-alt">
+                        <i class="fab fa-facebook-f"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="switch-form">
+                <p>Немає облікового запису? <a href="#" id="switch-to-register">Зареєструватися</a></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i>
+        <span id="notification-message"></span>
+    </div>
+
+    <!-- Підключаємо Firebase -->
+    <script type="module">
+        import { initializeApp } from "https://cdnjs.cloudflare.com/ajax/libs/firebase/9.23.0/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, FacebookAuthProvider, signInWithPopup, sendPasswordResetEmail } from "https://cdnjs.cloudflare.com/ajax/libs/firebase/9.23.0/firebase-auth.js";
+        import { getAnalytics } from "https://cdnjs.cloudflare.com/ajax/libs/firebase/9.23.0/firebase-analytics.js";
+
+        // Конфігурація Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyBX504xemLxE_eckV74-0jnPj4hJvK0DIw",
+            authDomain: "my-project-external-fe5f4.firebaseapp.com",
+            projectId: "my-project-external-fe5f4",
+            storageBucket: "my-project-external-fe5f4.firebasestorage.app",
+            messagingSenderId: "565933844021",
+            appId: "1:565933844021:web:ddaf34e04ef1797252f37c",
+            measurementId: "G-F7S76VLG9S"
+        };
+
+        // Ініціалізація Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const auth = getAuth(app);
+        const googleProvider = new GoogleAuthProvider();
+        const facebookProvider = new FacebookAuthProvider();
+
+        // DOM елементи
+        const registerForm = document.getElementById('register-form');
+        const loginForm = document.getElementById('login-form');
+        const registerContainer = document.querySelector('.form-container.register');
+        const loginContainer = document.querySelector('.form-container.login');
+        const switchToLogin = document.getElementById('switch-to-login');
+        const switchToRegister = document.getElementById('switch-to-register');
+        const googleLoginButtons = document.querySelectorAll('#google-login, #google-login-alt');
+        const facebookLoginButtons = document.querySelectorAll('#facebook-login, #facebook-login-alt');
+        const forgotPasswordLink = document.getElementById('forgot-password');
+        const notification = document.getElementById('notification');
+        const notificationMessage = document.getElementById('notification-message');
+
+        // Перемикання між формами
+        switchToLogin.addEventListener('click', (e) => {
+            e.preventDefault();
+            registerContainer.style.display = 'none';
+            loginContainer.style.display = 'block';
+            loginContainer.classList.add('fade-in');
+        });
+
+        switchToRegister.addEventListener('click', (e) => {
+            e.preventDefault();
+            loginContainer.style.display = 'none';
+            registerContainer.style.display = 'block';
+            registerContainer.classList.add('fade-in');
+        });
+
+        // Валідація паролю
+        const passwordInput = document.getElementById('register-password');
+        const confirmPasswordInput = document.getElementById('register-confirm-password');
+        const lengthRequirement = document.getElementById('length-requirement');
+        const uppercaseRequirement = document.getElementById('uppercase-requirement');
+        const lowercaseRequirement = document.getElementById('lowercase-requirement');
+        const numberRequirement = document.getElementById('number-requirement');
+
+        passwordInput.addEventListener('input', validatePassword);
+        confirmPasswordInput.addEventListener('input', validateConfirmPassword);
+
+        function validatePassword() {
+            const password = passwordInput.value;
+            
+            // Перевіряємо вимоги до паролю
+            const hasLength = password.length >= 8;
+            const hasUppercase = /[A-Z]/.test(password);
+            const hasLowercase = /[a-z]/.test(password);
+            const hasNumber = /[0-9]/.test(password);
+            
+            // Оновлюємо статус вимог
+            updateRequirement(lengthRequirement, hasLength);
+            updateRequirement(uppercaseRequirement, hasUppercase);
+            updateRequirement(lowercaseRequirement, hasLowercase);
+            updateRequirement(numberRequirement, hasNumber);
+            
+            return hasLength && hasUppercase && hasLowercase && hasNumber;
+        }
+
+        function validateConfirmPassword() {
+            const password = passwordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+            const confirmPasswordValidation = document.getElementById('confirm-password-validation');
+            
+            if (password !== confirmPassword) {
+                confirmPasswordValidation.textContent = 'Паролі не співпадають';
+                confirmPasswordValidation.style.display = 'block';
+                return false;
+            } else {
+                confirmPasswordValidation.style.display = 'none';
+                return true;
+            }
+        }
+
+        function updateRequirement(element, isValid) {
+            if (isValid) {
+                element.classList.add('valid');
+                element.querySelector('i').className = 'fa-solid fa-check';
+            } else {
+                element.classList.remove('valid');
+                element.querySelector('i').className = 'fa-regular fa-circle';
+            }
+        }
+
+        // Показ/приховування паролю
+        document.querySelectorAll('.password-toggle').forEach(toggle => {
+            toggle.addEventListener('click', (e) => {
+                const button = e.currentTarget;
+                const input = button.parentElement.querySelector('input');
+                const icon = button.querySelector('i');
+                
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    icon.className = 'fa-regular fa-eye-slash';
+                } else {
+                    input.type = 'password';
+                    icon.className = 'fa-regular fa-eye';
+                }
+            });
+        });
+
+        // Реєстрація користувача
+        registerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            const username = document.getElementById('register-username').value;
+            const registerButton = document.getElementById('register-button');
+            
+            // Перевірка валідності паролю
+            if (!validatePassword()) {
+                showNotification('Пароль не відповідає вимогам безпеки', 'error');
+                return;
+            }
+            
+            // Перевірка підтвердження паролю
+            if (!validateConfirmPassword()) {
+                return;
+            }
+            
+            // Встановлюємо кнопку в стан завантаження
+            registerButton.classList.add('loading');
+            
+            try {
+                // Створюємо користувача у Firebase
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                
+                // Очищуємо форму після успішної реєстрації
+                registerForm.reset();
+                
+                showNotification('Реєстрація успішна! Ви можете увійти в систему.', 'success');
+                
+                // Перемикаємо на форму входу
+                setTimeout(() => {
+                    switchToLogin.click();
+                }, 2000);
+                
+                console.log('Користувач зареєстрований:', userCredential.user);
+            } catch (error) {
+                let errorMessage;
+                
+                switch (error.code) {
+                    case 'auth/email-already-in-use':
+                        errorMessage = 'Цей email вже використовується';
+                        break;
+                    case 'auth/invalid-email':
+                        errorMessage = 'Неправильний формат email';
+                        break;
+                    case 'auth/weak-password':
+                        errorMessage = 'Пароль занадто слабкий';
+                        break;
+                    default:
+                        errorMessage = 'Помилка під час реєстрації';
+                }
+                
+                showNotification(errorMessage, 'error');
+                console.error('Помилка реєстрації:', error);
+            } finally {
+                // Прибираємо стан завантаження
+                registerButton.classList.remove('loading');
+            }
+        });
+
+        // Вхід користувача
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            const loginButton = document.getElementById('login-button');
+            
+            // Встановлюємо кнопку в стан завантаження
+            loginButton.classList.add('loading');
+            
+            try {
+                // Авторизація користувача у Firebase
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                
+                // Очищуємо форму після успішного входу
+                loginForm.reset();
+                
+                showNotification('Вхід успішний!', 'success');
+                
+                console.log('Користувач увійшов:', userCredential.user);
+                
+                // Тут можна додати перенаправлення на захищені сторінки
+                // window.location.href = 'dashboard.html';
+            } catch (error) {
+                let errorMessage;
+                
+                switch (error.code) {
+                    case 'auth/user-not-found':
+                    case 'auth/wrong-password':
+                        errorMessage = 'Неправильний email або пароль';
+                        break;
+                    case 'auth/invalid-email':
+                        errorMessage = 'Неправильний формат email';
+                        break;
+                    case 'auth/user-disabled':
+                        errorMessage = 'Обліковий запис відключено';
+                        break;
+                    default:
+                        errorMessage = 'Помилка входу';
+                }
+                
+                showNotification(errorMessage, 'error');
+                console.error('Помилка входу:', error);
+            } finally {
+                // Прибираємо стан завантаження
+                loginButton.classList.remove('loading');
+            }
+        });
+
+        // Авторизація через Google
+        googleLoginButtons.forEach(button => {
+            button.addEventListener('click', async () => {
+                try {
+                    const result = await signInWithPopup(auth, googleProvider);
+                    showNotification('Успішний вхід через Google!', 'success');
+                    console.log('Google авторизація:', result.user);
+                    
+                    // Тут можна додати перенаправлення на захищені сторінки
+                    // window.location.href = 'dashboard.html';
+                } catch (error) {
+                    showNotification('Помилка авторизації через Google', 'error');
+                    console.error('Помилка Google авторизації:', error);
+                }
+            });
+        });
+
+        // Авторизація через Facebook
+        facebookLoginButtons.forEach(button => {
+            button.addEventListener('click', async () => {
+                try {
+                    const result = await signInWithPopup(auth, facebookProvider);
+                    showNotification('Успішний вхід через Facebook!', 'success');
+                    console.log('Facebook авторизація:', result.user);
+                    
+                    // Тут можна додати перенаправлення на захищені сторінки
+                    // window.location.href = 'dashboard.html';
+                } catch (error) {
+                    showNotification('Помилка авторизації через Facebook', 'error');
+                    console.error('Помилка Facebook авторизації:', error);
+                }
+            });
+        });
+
+        // Відновлення паролю
+        forgotPasswordLink.addEventListener('click', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('login-email').value;
+            
+            if (!email) {
+                showNotification('Введіть email для відновлення паролю', 'error');
+                return;
+            }
+            
+            try {
+                await sendPasswordResetEmail(auth, email);
+                showNotification('Інструкції з відновлення паролю надіслано на ваш email', 'success');
+            } catch (error) {
+                let errorMessage;
+                
+                switch (error.code) {
+                    case 'auth/user-not-found':
+                        errorMessage = 'Користувача з таким email не знайдено';
+                        break;
+                    case 'auth/invalid-email':
+                        errorMessage = 'Неправильний формат email';
+                        break;
+                    default:
+                        errorMessage = 'Помилка відновлення паролю';
+                }
+                
+                showNotification(errorMessage, 'error');
+                console.error('Помилка відновлення паролю:', error);
+            }
+        });
+
+        // Показати повідомлення
+        function showNotification(message, type) {
+            notificationMessage.textContent = message;
+            notification.className = 'notification';
+            notification.classList.add(type);
+            notification.classList.add('show');
+            
+            const icon = notification.querySelector('i');
+            if (type === 'success') {
+                icon.className = 'fas fa-check-circle';
+            } else {
+                icon.className = 'fas fa-exclamation-circle';
+            }
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Додаємо анімації на елементи при наведенні
+        const animateElements = document.querySelectorAll('.input-group, .button, .social-button');
+        
+        animateElements.forEach(element => {
+            element.addEventListener('mouseenter', () => {
+                element.classList.add('slide-up');
+                setTimeout(() => {
+                    element.classList.remove('slide-up');
+                }, 500);
+            });
+        });
+    </script>
+</body>
+</html>
