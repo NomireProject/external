@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Синий портал - Регистрация</title>
+    <style>
+        :root {
+            --primary-color: #1a73e8;
+            --primary-dark: #0d47a1;
+            --primary-light: #64b5f6;
+            --background: #f5faff;
+            --text-color: #333;
+            --card-bg: #ffffff;
+            --error: #f44336;
+            --success: #4caf50;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--background);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            animation: fadeIn 1s ease-in-out;
+        }
+        
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 1.5rem;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            padding: 0.5rem 0;
+            transition: all 0.3s;
+        }
+        
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: white;
+            transition: width 0.3s;
+        }
+        
+        nav a:hover::after {
+            width: 100%;
+        }
+        
+        .wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 20px;
+            background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg"><path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25" fill="%23ffffff"/><path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" opacity=".5" fill="%23ffffff"/><path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z" fill="%23ffffff"/></svg>');
+            background-size: cover;
+            animation: waveAnimation 10s linear infinite;
+        }
+        
+        @keyframes waveAnimation {
+            0% {
+                background-position-x: 0;
+            }
+            100% {
+                background-position-x: 1000px;
+            }
+        }
+        
+        main {
+            flex: 1;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem 0;
+        }
+        
+        .auth-card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 450px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            animation: slideUp 0.8s ease-out;
+        }
+        
+        .card-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .card-header h2 {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .card-header p {
+            color: #666;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #555;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.2);
+        }
+        
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+            width: 100%;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(26, 115, 232, 0.3);
+        }
+        
+        .auth-options {
+            margin-top: 1.5rem;
+            text-align: center;
+        }
+        
+        .auth-options a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .auth-options a:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+        
+        .social-login {
+            margin-top: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .social-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            padding: 0.8rem;
+            border-radius: 6px;
+            border: 1px solid #e0e0e0;
+            background: white;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .social-btn:hover {
+            background: #f5f5f5;
+            transform: translateY(-2px);
+        }
+        
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 2rem 0;
+        }
+        
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #e0e0e0;
+        }
+        
+        .divider span {
+            padding: 0 1rem;
+            color: #666;
+        }
+        
+        .message {
+            padding: 0.8rem;
+            border-radius: 6px;
+            margin-bottom: 1.5rem;
+            display: none;
+        }
+        
+        .error {
+            background-color: rgba(244, 67, 54, 0.1);
+            color: var(--error);
+            border: 1px solid rgba(244, 67, 54, 0.3);
+        }
+        
+        .success {
+            background-color: rgba(76, 175, 80, 0.1);
+            color: var(--success);
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+        
+        .form-avatar {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .avatar-preview {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            overflow: hidden;
+            border: 3px solid var(--primary-light);
+        }
+        
+        .avatar-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .upload-btn {
+            background-color: transparent;
+            color: var(--primary-color);
+            border: none;
+            margin-top: 0.5rem;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        footer {
+            background-color: var(--primary-dark);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            margin-top: auto;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes floatIn {
+            0% {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .animated-text {
+            overflow: hidden;
+            display: inline-block;
+        }
+        
+        .animated-text span {
+            display: inline-block;
+            animation: floatIn 0.8s cubic-bezier(0.215, 0.61, 0.355, 1) both;
+            animation-delay: calc(0.05s * var(--char-index));
+        }
+
+        .hidden {
+            display: none;
+        }
+        
+        /* Анимация для появления изображений */
+        .image-reveal {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .image-reveal img {
+            animation: scaleIn 0.8s cubic-bezier(0.215, 0.61, 0.355, 1) forwards;
+            transform-origin: center;
+        }
+        
+        @keyframes scaleIn {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        
+        /* Стили для главной страницы */
+        .dashboard {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        
+        .welcome-banner {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .welcome-banner h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .welcome-banner p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 70%;
+        }
+        
+        .banner-decoration {
+            position: absolute;
+            right: -50px;
+            top: -50px;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            z-index: 0;
+        }
+        
+        .banner-decoration:before {
+            content: '';
+            position: absolute;
+            right: 50px;
+            bottom: 50px;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .dashboard-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+            animation: slideUp 0.8s ease-out;
+            animation-delay: calc(0.1s * var(--card-index));
+            opacity: 0;
+            animation-fill-mode: forwards;
+        }
+        
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            background-color: var(--primary-light);
+            color: var(--primary-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+        
+        .dashboard-card h3 {
+            font-size: 1.5rem;
+            color: var(--primary-dark);
+            margin-bottom: 1rem;
+        }
+        
+        .dashboard-card p {
+            color: #666;
+            margin-bottom: 1.5rem;
+        }
+        
+        .card-action {
+            display: inline-block;
+            color: var(--primary-color);
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .card-action:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+        
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stat-card h4 {
+            color: #666;
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-card .stat-value {
+            color: var(--primary-dark);
+            font-size: 2rem;
+            font-weight: 700;
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .profile-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+            background-color: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: var(--primary-dark);
+        }
+        
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .user-name {
+            font-weight: 500;
+        }
+        
+        .dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            padding: 1rem;
+            min-width: 200px;
+            z-index: 100;
+            display: none;
+        }
+        
+        .dropdown.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .dropdown-item {
+            padding: 0.8rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            color: var(--text-color);
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.3s;
+        }
+        
+        .dropdown-item:hover {
+            background-color: var(--background);
+        }
+        
+        .dropdown-divider {
+            height: 1px;
+            background-color: #e0e0e0;
+            margin: 0.5rem 0;
+        }
+        
+        /* Настройки профиля */
+        .settings-container {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .settings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .settings-header h2 {
+            color: var(--primary-dark);
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .tab {
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .tab.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+        
+        .tab:hover {
+            color: var(--primary-color);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        /* Медиа-запросы для адаптивности */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .auth-card {
+                padding: 1.5rem;
+            }
+            
+            .welcome-banner p {
+                max-width: 100%;
+            }
+            
+            .banner-decoration {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">BluePortal</div>
+            <nav>
+                <ul>
+                    <li><a href="index.html" class="active">Главная</a></li>
+                    <li><a href="about.html">О нас</a></li>
+                    <li><a href="services.html">Сервисы</a></li>
+                    <li><a href="contact.html">Контакты</a></li>
+                </ul>
+            </nav>
+            <div class="user-profile" id="userProfileContainer" style="display: none;">
+                <div class="profile-avatar" id="profileAvatar">
+                    <span id="avatarInitial"></span>
+                </div>
+                <span class="user-name" id="userName">Пользователь</span>
+                <div class="dropdown" id="userDropdown">
+                    <a href="profile.html" class="dropdown-item">
+                        <span>Мой профиль</span>
+                    </a>
+                    <a href="settings.html" class="dropdown-item">
+                        <span>Настройки</span>
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="#" class="dropdown-item" id="logoutBtn">
+                        <span>Выйти</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="wave"></div>
+    </header>
+
+    <main id="mainContent">
+        <!-- Авторизация и регистрация -->
+        <div class="auth-container" id="authContainer">
+            <div class="auth-card" id="loginCard">
+                <div class="card-header">
+                    <h2 class="animated-heading">Вход в систему</h2>
+                    <p>Добро пожаловать обратно!</p>
+                </div>
+                <div class="message error" id="loginError"></div>
+                <div class="message success" id="loginSuccess"></div>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="loginEmail">Email</label>
+                        <input type="email" id="loginEmail" class="form-control" placeholder="Введите ваш email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Пароль</label>
+                        <input type="password" id="loginPassword" class="form-control" placeholder="Введите ваш пароль" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Войти</button>
+                </form>
+                <div class="auth-options">
+                    <a href="#" id="forgotPassword">Забыли пароль?</a> • 
+                    <a href="#" id="showRegister">Создать аккаунт</a>
+                </div>
+                <div class="divider">
+                    <span>или</span>
+                </div>
+                <div class="social-login">
+                    <button class="social-btn" id="googleLogin">
+                        <span>Войти с помощью Google</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="auth-card hidden" id="registerCard">
+                <div class="card-header">
+                    <h2 class="animated-heading">Регистрация</h2>
+                    <p>Создайте новый аккаунт</p>
+                </div>
+                <div class="message error" id="registerError"></div>
+                <div class="message success" id="registerSuccess"></div>
+                <div class="form-avatar">
+                    <div class="avatar-preview" id="avatarPreview">
+                        <img src="/api/placeholder/100/100" alt="Аватар пользователя" id="avatarImage" style="display: none;">
+                        <span id="avatarPlaceholder">Фото</span>
+                    </div>
+                    <input type="file" id="avatarUpload" accept="image/*" style="display: none;">
+                    <button class="upload-btn" id="uploadAvatarBtn">Загрузить фото</button>
+                </div>
+                <form id="registerForm">
+                    <div class="form-group">
+                        <label for="registerName">Имя</label>
+                        <input type="text" id="registerName" class="form-control" placeholder="Введите ваше имя" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerEmail">Email</label>
+                        <input type="email" id="registerEmail" class="form-control" placeholder="Введите ваш email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerPassword">Пароль</label>
+                        <input type="password" id="registerPassword" class="form-control" placeholder="Создайте пароль" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Подтверждение пароля</label>
+                        <input type="password" id="confirmPassword" class="form-control" placeholder="Подтвердите пароль" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+                </form>
+                <div class="auth-options">
+                    <span>Уже есть аккаунт?</span> 
+                    <a href="#" id="showLogin">Войти</a>
+                </div>
+            </div>
+
+            <div class="auth-card hidden" id="forgotPasswordCard">
+                <div class="card-header">
+                    <h2 class="animated-heading">Восстановление пароля</h2>
+                    <p>Мы отправим вам инструкции на почту</p>
+                </div>
+                <div class="message error" id="resetError"></div>
+                <div class="message success" id="resetSuccess"></div>
+                <form id="resetForm">
+                    <div class="form-group">
+                        <label for="resetEmail">Email</label>
+                        <input type="email" id="resetEmail" class="form-control" placeholder="Введите ваш email" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Отправить инструкции</button>
+                </form>
+                <div class="auth-options">
+                    <a href="#" id="backToLogin">Вернуться к входу</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Главная страница для авторизованных пользователей -->
+        <div class="dashboard hidden" id="dashboardContainer">
+            <div class="welcome-banner">
+                <div class="banner-decoration"></div>
+                <h1>Добро пожаловать, <span id="welcomeUserName">Пользователь</span>!</h1>
+                <p>Рады видеть вас снова. Вот ваша персональная панель управления.</p>
+            </div>
+
+            <div class="stats-container">
+                <div class="stat-card">
+                    <h4>Посещения</h4>
+                    <div class="stat-value">127</div>
+                </div>
+                <div class="stat-card">
+                    <h4>Активность</h4>
+                    <div class="stat-value">85%</div>
+                </div>
+                <div class="stat-card">
+                    <h4>Сообщения</h4>
+                    <div class="stat-value">12</div>
+                </div>
+                <div class="stat-card">
+                    <h4>Завершено</h4>
+                    <div class="stat-value">8</div>
+                </div>
+            </div>
+
+            <div class="cards-container">
+                <div class="dashboard-card" style="--card-index: 1">
+                    <div class="card-icon">📊</div>
+                    <h3>Мой профиль</h3>
+                    <p>Управляйте вашими личными данными и настройками аккаунта.</p>
+                    <a href="profile.html" class="card-action">Перейти →</a>
+                </div>
+                <div class="dashboard-card" style="--card-index: 2">
+                    <div class="card-icon">📝</div>
+                    <h3>Проекты</h3>
+                    <p>Создавайте и управляйте вашими проектами в одном месте.</p>
+                    <a href="projects.html" class="card-action">Просмотреть →</a>
+                </div>
+                <div class="dashboard-card" style="--card-index: 3">
+<div class="card-icon">📩</div>
+                    <h3>Сообщения</h3>
+                    <p>Здесь вы можете просмотреть все ваши сообщения и уведомления.</p>
+                    <a href="messages.html" class="card-action">Проверить →</a>
+                </div>
+                <div class="dashboard-card" style="--card-index: 4">
+                    <div class="card-icon">⚙️</div>
+                    <h3>Настройки</h3>
+                    <p>Настройте ваш аккаунт под свои потребности.</p>
+                    <a href="settings.html" class="card-action">Настроить →</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 BluePortal. Все права защищены.</p>
+    </footer>
+
+    <script>
+        // Функция для анимации текста
+        function animateText() {
+            const headings = document.querySelectorAll('.animated-heading');
+            headings.forEach(heading => {
+                const text = heading.textContent;
+                heading.innerHTML = '';
+                heading.classList.add('animated-text');
+                
+                for (let i = 0; i < text.length; i++) {
+                    const span = document.createElement('span');
+                    span.textContent = text[i];
+                    span.style.setProperty('--char-index', i);
+                    heading.appendChild(span);
+                }
+            });
+        }
+        
+        // Переключение между формами
+        document.getElementById('showRegister').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('loginCard').classList.add('hidden');
+            document.getElementById('registerCard').classList.remove('hidden');
+        });
+        
+        document.getElementById('showLogin').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('registerCard').classList.add('hidden');
+            document.getElementById('loginCard').classList.remove('hidden');
+        });
+        
+        document.getElementById('forgotPassword').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('loginCard').classList.add('hidden');
+            document.getElementById('forgotPasswordCard').classList.remove('hidden');
+        });
+        
+        document.getElementById('backToLogin').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('forgotPasswordCard').classList.add('hidden');
+            document.getElementById('loginCard').classList.remove('hidden');
+        });
+        
+        // Обработка загрузки аватара
+        document.getElementById('uploadAvatarBtn').addEventListener('click', function() {
+            document.getElementById('avatarUpload').click();
+        });
+        
+        document.getElementById('avatarUpload').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.getElementById('avatarImage');
+                    img.src = e.target.result;
+                    img.style.display = 'block';
+                    document.getElementById('avatarPlaceholder').style.display = 'none';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        // Обработка формы входа
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            // Здесь будет код для отправки запроса на сервер
+            // В примере просто имитируем успешный вход
+            
+            const errorMsg = document.getElementById('loginError');
+            const successMsg = document.getElementById('loginSuccess');
+            
+            // Для демонстрации, считаем вход успешным если email содержит @ и пароль не пустой
+            if (email.includes('@') && password.trim() !== '') {
+                errorMsg.style.display = 'none';
+                successMsg.textContent = 'Вход выполнен успешно!';
+                successMsg.style.display = 'block';
+                
+                // Имитация перехода на дашборд
+                setTimeout(() => {
+                    document.getElementById('authContainer').classList.add('hidden');
+                    document.getElementById('dashboardContainer').classList.remove('hidden');
+                    document.getElementById('userProfileContainer').style.display = 'flex';
+                    
+                    // Устанавливаем имя пользователя
+                    const userName = email.split('@')[0];
+                    document.getElementById('userName').textContent = userName;
+                    document.getElementById('welcomeUserName').textContent = userName;
+                    
+                    // Устанавливаем инициалы для аватара
+                    document.getElementById('avatarInitial').textContent = userName.charAt(0).toUpperCase();
+                }, 1000);
+            } else {
+                successMsg.style.display = 'none';
+                errorMsg.textContent = 'Неверный email или пароль';
+                errorMsg.style.display = 'block';
+            }
+        });
+        
+        // Обработка формы регистрации
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            const errorMsg = document.getElementById('registerError');
+            const successMsg = document.getElementById('registerSuccess');
+            
+            // Проверка совпадения паролей
+            if (password !== confirmPassword) {
+                errorMsg.textContent = 'Пароли не совпадают';
+                errorMsg.style.display = 'block';
+                successMsg.style.display = 'none';
+                return;
+            }
+            
+            // Здесь будет код для отправки запроса на сервер
+            // В примере просто имитируем успешную регистрацию
+            
+            errorMsg.style.display = 'none';
+            successMsg.textContent = 'Регистрация выполнена успешно! Перенаправление...';
+            successMsg.style.display = 'block';
+            
+            // Имитация перехода на форму входа
+            setTimeout(() => {
+                document.getElementById('registerCard').classList.add('hidden');
+                document.getElementById('loginCard').classList.remove('hidden');
+                document.getElementById('loginEmail').value = email;
+            }, 2000);
+        });
+        
+        // Обработка формы восстановления пароля
+        document.getElementById('resetForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('resetEmail').value;
+            
+            const errorMsg = document.getElementById('resetError');
+            const successMsg = document.getElementById('resetSuccess');
+            
+            // Здесь будет код для отправки запроса на сервер
+            // В примере просто имитируем успешную отправку
+            
+            if (email.includes('@')) {
+                errorMsg.style.display = 'none';
+                successMsg.textContent = 'Инструкция по восстановлению пароля отправлена на вашу почту';
+                successMsg.style.display = 'block';
+                
+                // Имитация перехода на форму входа
+                setTimeout(() => {
+                    document.getElementById('forgotPasswordCard').classList.add('hidden');
+                    document.getElementById('loginCard').classList.remove('hidden');
+                }, 3000);
+            } else {
+                successMsg.style.display = 'none';
+                errorMsg.textContent = 'Пожалуйста, введите корректный email';
+                errorMsg.style.display = 'block';
+            }
+        });
+        
+        // Обработка выпадающего меню профиля
+        document.getElementById('userProfileContainer').addEventListener('click', function() {
+            document.getElementById('userDropdown').classList.toggle('active');
+        });
+        
+        // Закрытие выпадающего меню при клике вне его
+        document.addEventListener('click', function(e) {
+            if (!document.getElementById('userProfileContainer').contains(e.target)) {
+                document.getElementById('userDropdown').classList.remove('active');
+            }
+        });
+        
+        // Обработка выхода из системы
+        document.getElementById('logoutBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Здесь будет код для выхода из системы
+            // В примере просто возвращаемся к форме входа
+            
+            document.getElementById('dashboardContainer').classList.add('hidden');
+            document.getElementById('userProfileContainer').style.display = 'none';
+            document.getElementById('authContainer').classList.remove('hidden');
+            document.getElementById('loginCard').classList.remove('hidden');
+        });
+        
+        // Инициализация анимации при загрузке страницы
+        window.addEventListener('load', function() {
+            animateText();
+        });
+    </script>
+</body>
+</html>
